@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Models.Response
 {
-    public class InsertProjectResponseModel
+    public class BaseResponseModel
     {
-        public Guid Code { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.ControleTarefas.Domain.Commands
+namespace API.ControleTarefas.Domain.Queries
 {
-    public class InsertProjectCommand : IRequest<InsertProjectResponseModel>
+    public class SearchProjectByIdQuery : IRequest<ProjectResultModel>
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
     }
 }

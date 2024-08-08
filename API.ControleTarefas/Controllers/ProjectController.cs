@@ -19,12 +19,12 @@ namespace API.ControleTarefas.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         [Route("register")]
-        [ProducesResponseType(typeof(InsertProjectResponseModel), 201)]
+        [ProducesResponseType(typeof(BaseResponseModel), 201)]
         [ProducesResponseType(typeof(Notification), 400)]
         [Produces("application/json")]
-        public async Task<IActionResult> Create([FromBody] InsertProjectCommand request)
+        public async Task<IActionResult> UpSert([FromBody] UpsertProjectCommand request)
             => Response(await _mediator.Send(request), 201);
 
 
@@ -35,5 +35,15 @@ namespace API.ControleTarefas.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> Search([FromQuery] SearchProjectQuery request)
             => Response(await _mediator.Send(request), 200);
+
+        [HttpGet]
+        //[Authorize]
+        [Route("id")]
+        [ProducesResponseType(typeof(ProjectResultModel), 200)]
+        [ProducesResponseType(typeof(Notification), 400)]
+        [Produces("application/json")]
+        public async Task<IActionResult> SearchById([FromQuery] SearchProjectByIdQuery request)
+            => Response(await _mediator.Send(request));
+
     }
 }

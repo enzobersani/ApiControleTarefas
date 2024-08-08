@@ -1,4 +1,5 @@
 ﻿using API.ControleTarefas.Domain.Models.Response;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Commands
 {
-    public class RegisterUserCommand() : IRequest<RegisterUserResponseModel>
+    public class InsertCollaboratorCommand : IRequest<BaseResponseModel>
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public string Name { get; set; }
+        public string UserId { get; set; }
     }
 }

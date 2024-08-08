@@ -8,13 +8,18 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Entities
 {
-    public class Project : EntityBase
+    public class ProjectEntity : BaseEntity
     {
         public string Name { get; private set; }
 
-        public Project() {}
+        public ProjectEntity() {}
 
-        public Project(string name)
+        public ProjectEntity(string name)
+        {
+            Name = name;
+        }
+
+        public void Update(string name)
         {
             Name = name;
         }

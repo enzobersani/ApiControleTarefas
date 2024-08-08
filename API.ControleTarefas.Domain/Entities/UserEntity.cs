@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Entities
 {
-    public class User : EntityBase
+    public class UserEntity : BaseEntity
     {
         public string UserName { get; private set; }
         public string Password { get; private set; }
 
-        public User() { }
+        public UserEntity() { }
 
-        public static User New(RegisterUserCommand request, string hashPassword) 
+        public static UserEntity New(RegisterUserCommand request, string hashPassword) 
         {
-            var users = new User();
+            var users = new UserEntity();
             request.Adapt(users);
             users.Password = hashPassword;
 

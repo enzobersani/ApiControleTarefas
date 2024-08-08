@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Interfaces.Repositories
 {
-    public interface IUserRepository
+    public interface ITaskRepository
     {
-        Task AddAsync(UserEntity user);
-        Task<UserEntity> GetByUserName(string userName);
-        Task<UserEntity> GetById(string id);
+        Task AddAsync(TaskEntity task);
+        Task<TaskEntity> GetById(string id);
     }
 }

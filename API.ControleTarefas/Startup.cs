@@ -1,10 +1,9 @@
-﻿using API.ControleTarefas.Domain.Interfaces.Repositories;
+﻿using API.ControleTarefas.Domain.Commands;
 using API.ControleTarefas.Domain.Interfaces.UnitOfWork;
-using API.ControleTarefas.Infrastructure.Repositories;
+using API.ControleTarefas.Domain.Validators;
 using API.ControleTarefas.Infrastructure.UnitOfWork;
-using Microsoft.AspNetCore.Identity;
+using FluentValidation;
 using Microsoft.OpenApi.Models;
-using System.Runtime.CompilerServices;
 
 namespace API.ControleTarefas
 {
@@ -13,6 +12,16 @@ namespace API.ControleTarefas
         public static void ConfigureRepositories(IServiceCollection services)
         {
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+        }
+
+        public static void ConfigureValidators(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<LoginCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<InsertProjectCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<InsertTaskCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<InsertCollaboratorCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<InsertTimeTrackersCommandValidator>();
         }
 
         public static IServiceCollection AddInfrastructureSwagger(this IServiceCollection services)

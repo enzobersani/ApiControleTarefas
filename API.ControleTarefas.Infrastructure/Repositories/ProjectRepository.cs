@@ -2,6 +2,7 @@
 using API.ControleTarefas.Domain.Interfaces.Repositories;
 using API.ControleTarefas.Domain.Notification;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using Task = System.Threading.Tasks.Task;
 
 namespace API.ControleTarefas.Infrastructure.Repositories
@@ -16,12 +17,12 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             _context = context;
             _notifications = notification;
         }
-        public async Task AddAsync(Project project)
+        public async Task AddAsync(ProjectEntity project)
         {
             await _context.Projects.AddAsync(project);
         }
 
-        public async Task<List<Project>> GetByName(string name)
+        public async Task<List<ProjectEntity>> GetByName(string name)
         {
             try
             {
@@ -34,7 +35,7 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<Project>> GetAllProjects()
+        public async Task<List<ProjectEntity>> GetAllProjects()
         {
             try
             {
@@ -43,6 +44,19 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             catch (Exception ex)
             {
                 _notifications.AddNotification("GetByName", $"Ocorreu um erro: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<ProjectEntity> GetById(string id)
+        {
+            try
+            {
+                return await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            }
+            catch (Exception ex)
+            {
+                _notifications.AddNotification("GetById", $"Ocorreu um erro: {ex.Message}");
                 return null;
             }
         }

@@ -17,6 +17,8 @@ namespace API.ControleTarefas.Infrastructure.UnitOfWork
         private readonly INotificationService _notifications;
         private IUserRepository _userRepository;
         private IProjectRepository _projectRepository;
+        private ITaskRepository _taskRepository;
+        private ICollaboratorRepository _collaboratorRepository;
         #endregion
 
         #region constructor
@@ -33,6 +35,12 @@ namespace API.ControleTarefas.Infrastructure.UnitOfWork
 
         public IProjectRepository ProjectRepository
             => _projectRepository ??= new ProjectRepository(_context, _notifications);
+
+        public ITaskRepository TaskRepository
+            => _taskRepository ??= new TaskRepository(_context, _notifications);
+
+        public ICollaboratorRepository CollaboratorRepository
+            => _collaboratorRepository ??= new CollaboratorRepository(_context, _notifications);
         #endregion
 
         #region methods

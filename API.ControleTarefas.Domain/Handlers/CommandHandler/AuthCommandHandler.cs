@@ -40,7 +40,7 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
 
             var hashPassword = HashPassword(request.Password);
 
-            var user = User.New(request, hashPassword);
+            var user = UserEntity.New(request, hashPassword);
             user.SetCreationDate();
 
             await _unitOfWork.UserRepository.AddAsync(user);

@@ -3,6 +3,7 @@ using API.ControleTarefas.Domain.Interfaces.UnitOfWork;
 using API.ControleTarefas.Domain.Models.Response;
 using API.ControleTarefas.Domain.Notification;
 using API.ControleTarefas.Domain.Queries;
+using Mapster;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,7 +14,8 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Handlers.QueryHandler
 {
-    public class ProjectQueryHandler : IRequestHandler<SearchProjectQuery, SearchProjectResponseModel>
+    public class ProjectQueryHandler : IRequestHandler<SearchProjectQuery, SearchProjectResponseModel>,
+                                       IRequestHandler<SearchProjectByIdQuery, ProjectResultModel>
     {
         private readonly INotificationService _notifications;
         private readonly IConfiguration _configuration;
@@ -27,7 +29,7 @@ namespace API.ControleTarefas.Domain.Handlers.QueryHandler
         }
         public async Task<SearchProjectResponseModel> Handle(SearchProjectQuery request, CancellationToken cancellationToken)
         {
-            List<Project> projects;
+            List<ProjectEntity> projects;
             if (request.Name is null)
                 projects = await _unitOfWork.ProjectRepository.GetAllProjects();
             else
@@ -59,6 +61,18 @@ namespace API.ControleTarefas.Domain.Handlers.QueryHandler
                 _notifications.AddNotification("Handle", $"Página {request.Page.ToString()} não encontrada!");
 
             return response;
+        }
+        public async Task<ProjectResultModel> Handle(SearchProjectByIdQuery request, CancellationToken cancellationToken)
+        {
+            var project = await _unitOfWork.ProjectRepository.GetById(request.Id);
+            if (project is null)
+                return new ProjectResultModel();
+
+            return new ProjectResultModel
+            {
+                Id = project.Id,
+                Name = project.Name
+            };
         }
     }
 }

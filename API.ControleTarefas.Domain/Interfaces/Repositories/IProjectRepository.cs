@@ -10,8 +10,9 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
 {
     public interface IProjectRepository
     {
-        Task AddAsync(Project project);
-        Task<List<Project>> GetByName(string name);
-        Task<List<Project>> GetAllProjects();
+        Task AddAsync(ProjectEntity project);
+        Task<List<ProjectEntity>> GetByName(string name);
+        Task<List<ProjectEntity>> GetAllProjects();
+        Task<ProjectEntity> GetById(string id);
     }
 }

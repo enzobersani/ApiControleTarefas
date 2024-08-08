@@ -12,5 +12,7 @@ namespace API.ControleTarefas.Domain.Interfaces.UnitOfWork
         Task<bool> CommitAsync();
         IUserRepository UserRepository { get; }
         IProjectRepository ProjectRepository { get; }
+        ITaskRepository TaskRepository { get; }
+        ICollaboratorRepository CollaboratorRepository { get; }
     }
 }

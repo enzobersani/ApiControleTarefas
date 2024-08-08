@@ -1,6 +1,9 @@
 using API.ControleTarefas;
+using API.ControleTarefas.Domain;
 using API.ControleTarefas.Domain.Notification;
 using API.ControleTarefas.Infrastructure;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,9 +12,21 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+
 builder.Services.AddDbContext<ApiControleTarefasDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 25))));
@@ -19,6 +34,9 @@ builder.Services.AddDbContext<ApiControleTarefasDbContext>(options =>
 var assemblies = Assembly.Load("API.ControleTarefas.Domain");
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
 
+builder.Services.AddFluentValidationAutoValidation();
+
+Startup.ConfigureValidators(builder.Services);
 Startup.ConfigureRepositories(builder.Services);
 
 builder.Services.AddHttpContextAccessor();
@@ -63,6 +81,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 
