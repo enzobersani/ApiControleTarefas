@@ -1,11 +1,6 @@
 ﻿using API.ControleTarefas.Domain.Commands;
 using API.ControleTarefas.Domain.Entities.Base;
 using Mapster;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Entities
 {

@@ -10,5 +10,9 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
     public interface ICollaboratorRepository
     {
         Task AddAsync(CollaboratorEntity collaborator);
+        Task<CollaboratorEntity> GetById(Guid id);
+        Task<List<CollaboratorEntity>> GetByName(string name);
+        Task<List<CollaboratorEntity>> GetAllCollaborators();
+        IQueryable<CollaboratorEntity> Query();
     }
 }

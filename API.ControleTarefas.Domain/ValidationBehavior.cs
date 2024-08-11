@@ -6,26 +6,29 @@ namespace API.ControleTarefas.Domain
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly IValidator<TRequest> _validator;
-        private readonly INotificationService _notifcations;
+        private readonly IValidator<TRequest>? _validator;
+        private readonly INotificationService _notifications;
 
-        public ValidationBehavior(IValidator<TRequest> validator, INotificationService notifications)
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators, INotificationService notifications)
         {
-            _validator = validator;
-            _notifcations = notifications;
+            _validator = validators.FirstOrDefault();
+            _notifications = notifications;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-            if (!validationResult.IsValid)
+            if (_validator != null)
             {
-                foreach (var error in validationResult.Errors)
+                var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+                if (!validationResult.IsValid)
                 {
-                    _notifcations.AddNotification(error.PropertyName, error.ErrorMessage);
+                    foreach (var error in validationResult.Errors)
+                    {
+                        _notifications.AddNotification(error.PropertyName, error.ErrorMessage);
+                    }
+                    return default;
                 }
-                return default;
             }
 
             return await next();

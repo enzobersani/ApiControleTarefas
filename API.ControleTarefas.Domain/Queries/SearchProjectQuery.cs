@@ -13,6 +13,5 @@ namespace API.ControleTarefas.Domain.Queries
         public string Name { get; set; }
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 100;
-        //public string? Expand { get; set; }
     }
 }

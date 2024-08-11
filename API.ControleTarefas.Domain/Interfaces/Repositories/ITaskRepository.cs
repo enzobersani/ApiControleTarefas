@@ -10,6 +10,8 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
     public interface ITaskRepository
     {
         Task AddAsync(TaskEntity task);
-        Task<TaskEntity> GetById(string id);
+        void Update(TaskEntity task);
+        Task<TaskEntity> GetById(Guid id);
+        IQueryable<TaskEntity> Query();
     }
 }

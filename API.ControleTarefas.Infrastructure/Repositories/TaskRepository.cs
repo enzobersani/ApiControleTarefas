@@ -2,6 +2,7 @@
 using API.ControleTarefas.Domain.Interfaces.Repositories;
 using API.ControleTarefas.Domain.Notification;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace API.ControleTarefas.Infrastructure.Repositories
 {
@@ -21,11 +22,16 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             await _context.Tasks.AddAsync(task);
         }
 
-        public async Task<TaskEntity> GetById(string id)
+        public void Update(TaskEntity task)
+        {
+            _context.Tasks.Update(task);
+        }
+
+        public async Task<TaskEntity> GetById(Guid id)
         {
             try
             {
-                return await _context.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.Id.ToString() == id);
+                return await _context.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
@@ -33,5 +39,18 @@ namespace API.ControleTarefas.Infrastructure.Repositories
                 return null;
             }
         }
+
+        public IQueryable<TaskEntity> Query()
+        {
+            try
+            {
+                return _context.Tasks.AsQueryable();
+            }
+            catch (Exception ex)
+            {
+                _notifications.AddNotification("Query", $"Ocorreu um erro: {ex.Message}");
+                return null;
+            }
+        }    
     }
 }

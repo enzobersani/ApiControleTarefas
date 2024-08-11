@@ -8,7 +8,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace API.ControleTarefas.Domain.Handlers.CommandHandler
 {
-    public class ProjectCommandHandler : IRequestHandler<UpsertProjectCommand, BaseResponseModel>
+    public class ProjectCommandHandler : IRequestHandler<CreateProjectCommand, BaseResponseModel>,
+                                         IRequestHandler<UpdateProjectCommand, UpdateProjectResponseModel>,
+                                         IRequestHandler<DeleteProjectCommand, DeleteProjectResponseModel>
     {
 
         private readonly INotificationService _notifications;
@@ -22,29 +24,63 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponseModel> Handle(UpsertProjectCommand request, CancellationToken cancellationToken)
+        public async Task<BaseResponseModel> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
-            ProjectEntity project;
+            var project = new ProjectEntity(request.Name);
+            project.SetCreationDate();
 
-            var existingProject = await _unitOfWork.ProjectRepository.GetById(request.Id);
-            if (existingProject != null) 
-            {
-                existingProject.Update(request.Name);
-                existingProject.SetUpdateDate();
-                project = existingProject;
-            }
-            else
-            {
-                project = new ProjectEntity(request.Name);
-                project.SetCreationDate();
-
-                await _unitOfWork.ProjectRepository.AddAsync(project);
-            }
+            await _unitOfWork.ProjectRepository.AddAsync(project);
 
             await _unitOfWork.CommitAsync();
             return new BaseResponseModel
             {
                 Id = project.Id
+            };
+        }
+
+        public async Task<UpdateProjectResponseModel> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
+        {
+            var project = await _unitOfWork.ProjectRepository.GetById(request.Id);
+            if (project is null)
+            {
+                _notifications.AddNotification("Handle", "Projeto informado não cadastrado!");
+                return new UpdateProjectResponseModel();
+            }
+
+            project.Update(request.Name);
+            project.SetUpdateDate();
+
+            _unitOfWork.ProjectRepository.Update(project);
+            await _unitOfWork.CommitAsync();
+            return new UpdateProjectResponseModel
+            {
+                Id = project.Id,
+                Name = project.Name,
+                IsInactive = project.IsInactive
+            };
+        }
+
+        public async Task<DeleteProjectResponseModel> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+        {
+            var project = await _unitOfWork.ProjectRepository.GetById(request.Id);
+
+            if (project is null)
+            {
+                _notifications.AddNotification("Handle", "Projeto não encontrado.");
+                return new DeleteProjectResponseModel();
+            }
+
+            project.SetDeleteDate();
+            project.SetInactive();
+
+            _unitOfWork.ProjectRepository.Update(project);
+
+            await _unitOfWork.CommitAsync();
+
+            return new DeleteProjectResponseModel
+            {
+                Id = project.Id,
+                IsInactive = project.IsInactive
             };
         }
     }

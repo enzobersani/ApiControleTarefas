@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace API.ControleTarefas.Domain.Entities.Base
+﻿namespace API.ControleTarefas.Domain.Entities.Base
 {
     public class BaseEntity
     {
@@ -31,6 +24,10 @@ namespace API.ControleTarefas.Domain.Entities.Base
         public void SetDeleteDate()
         {
             DeletedAt = DateTime.UtcNow;
+        }
+        public void SetInactive()
+        {
+            IsInactive = true;
         }
     }
 }

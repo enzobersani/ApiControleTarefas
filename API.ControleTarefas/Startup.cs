@@ -3,6 +3,7 @@ using API.ControleTarefas.Domain.Interfaces.UnitOfWork;
 using API.ControleTarefas.Domain.Validators;
 using API.ControleTarefas.Infrastructure.UnitOfWork;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
 namespace API.ControleTarefas
@@ -22,6 +23,11 @@ namespace API.ControleTarefas
             services.AddValidatorsFromAssemblyContaining<InsertTaskCommandValidator>();
             services.AddValidatorsFromAssemblyContaining<InsertCollaboratorCommandValidator>();
             services.AddValidatorsFromAssemblyContaining<InsertTimeTrackersCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<SearchProjectByIdQueryValidator>();
+            services.AddValidatorsFromAssemblyContaining<UpdateProjectCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<DeleteProjectCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<DeleteTaskCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<UpdateTaskCommandValidator>();
         }
 
         public static IServiceCollection AddInfrastructureSwagger(this IServiceCollection services)

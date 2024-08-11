@@ -5,15 +5,12 @@ using API.ControleTarefas.Domain.Models.Response;
 using API.ControleTarefas.Domain.Notification;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Handlers.CommandHandler
 {
-    internal class TaskCommandHandler : IRequestHandler<InsertTaskCommand, BaseResponseModel>
+    internal class TaskCommandHandler : IRequestHandler<InsertTaskCommand, BaseResponseModel>,
+                                        IRequestHandler<UpdateTaskCommand, UpdateTaskResponseModel>,
+                                        IRequestHandler<DeleteTaskCommand, DeleteTaskResponseModel>
     {
         private readonly INotificationService _notifications;
         private readonly IConfiguration _configuration;
@@ -37,6 +34,55 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
             return new BaseResponseModel
             {
                 Id = task.Id
+            };
+        }
+
+        public async Task<UpdateTaskResponseModel> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
+        {
+            var task = await _unitOfWork.TaskRepository.GetById(request.Id);
+            if (task is null)
+            {
+                _notifications.AddNotification("Handle", "Tarefa informada não cadastrada!");
+                return new UpdateTaskResponseModel();
+            }
+
+            task.Update(request);
+            task.SetUpdateDate();
+
+            _unitOfWork.TaskRepository.Update(task);
+            await _unitOfWork.CommitAsync();
+            return new UpdateTaskResponseModel
+            {
+                Id = task.Id,
+                Name = task.Name,
+                Description = task.Description,
+                CollaboratorId = task.CollaboratorId,
+                ProjectId = task.ProjectId,
+                IsInactive = task.IsInactive
+            };
+        }
+
+        public async Task<DeleteTaskResponseModel> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
+        {
+            var task = await _unitOfWork.TaskRepository.GetById(request.Id);
+
+            if (task is null)
+            {
+                _notifications.AddNotification("Handle", "Projeto não encontrado.");
+                return new DeleteTaskResponseModel();
+            }
+
+            task.SetDeleteDate();
+            task.SetInactive();
+
+            _unitOfWork.TaskRepository.Update(task);
+
+            await _unitOfWork.CommitAsync();
+
+            return new DeleteTaskResponseModel
+            {
+                Id = task.Id,
+                IsInactive = task.IsInactive
             };
         }
     }

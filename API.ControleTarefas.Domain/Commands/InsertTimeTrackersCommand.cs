@@ -12,9 +12,9 @@ namespace API.ControleTarefas.Domain.Commands
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string? TimeZoneId { get; set; }
-        public string TaskId { get; set; }
-        public string CollaboratorId { get; set; }
+        public string TimeZoneId { get; set; }
+        public Guid TaskId { get; set; }
+        public Guid CollaboratorId { get; set; }
 
     }
 }

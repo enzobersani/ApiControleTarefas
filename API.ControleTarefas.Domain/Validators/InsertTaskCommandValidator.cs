@@ -15,6 +15,9 @@ namespace API.ControleTarefas.Domain.Validators
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nome da tarefa é obrigatório!")
                 .MaximumLength(250).WithMessage("Nome de usuário deve ter no máximo 250 caracteres!");
+
+            RuleFor(x => x.ProjectId)
+                .NotEmpty().WithMessage("É obrigatório informar um projeto.");
         }
     }
 }

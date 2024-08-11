@@ -1,4 +1,6 @@
 ﻿using API.ControleTarefas.Domain.Interfaces.Repositories;
+using API.ControleTarefas.Domain.Models;
+using API.ControleTarefas.Domain.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +16,6 @@ namespace API.ControleTarefas.Domain.Interfaces.UnitOfWork
         IProjectRepository ProjectRepository { get; }
         ITaskRepository TaskRepository { get; }
         ICollaboratorRepository CollaboratorRepository { get; }
+        ITimeTrackerRepository TimeTrackerRepository { get; }
     }
 }

@@ -22,11 +22,16 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             await _context.Projects.AddAsync(project);
         }
 
+        public void Update(ProjectEntity project)
+        {
+            _context.Projects.Update(project);
+        }
+
         public async Task<List<ProjectEntity>> GetByName(string name)
         {
             try
             {
-                return await _context.Projects.AsNoTracking().Where(x => x.Name == name).ToListAsync();
+                return await _context.Projects.AsNoTracking().Where(x => x.Name.ToUpper() == name.ToUpper() && x.IsInactive == false).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -39,7 +44,7 @@ namespace API.ControleTarefas.Infrastructure.Repositories
         {
             try
             {
-                return await _context.Projects.AsNoTracking().ToListAsync();
+                return await _context.Projects.AsNoTracking().Where(x => x.IsInactive == false).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -48,11 +53,11 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             }
         }
 
-        public async Task<ProjectEntity> GetById(string id)
+        public async Task<ProjectEntity> GetById(Guid id)
         {
             try
             {
-                return await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id.ToString() == id);
+                return await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.IsInactive == false);
             }
             catch (Exception ex)
             {

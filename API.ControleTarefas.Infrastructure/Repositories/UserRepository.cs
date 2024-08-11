@@ -34,15 +34,15 @@ namespace API.ControleTarefas.Infrastructure.Repositories
             }
         }
 
-        public async Task<UserEntity> GetById(string id)
+        public async Task<UserEntity> GetById(Guid id)
         {
             try
             {
-                return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id.ToString() == id.Trim());
+                return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
-                _notifications.AddNotification("GetByUserName", $"Ocorreu um erro: {ex.Message}");
+                _notifications.AddNotification("GetById", $"Ocorreu um erro: {ex.Message}");
                 return null;
             }
         }

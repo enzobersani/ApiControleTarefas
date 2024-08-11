@@ -16,20 +16,10 @@ namespace API.ControleTarefas.Controllers.Base
             {
                 var notifications = _notifications.GetNotifications();
 
-                //if (notifications.Any(e => e.Code == "PathParamNotFound"))
-                //{
-                //    return NotFound(new { notifications });
-                //}
-
                 if (notifications.Any(e => e.Code == "Unauthorized"))
                 {
                     return Unauthorized(new { notifications });
                 }
-
-                //if (notifications.Any(e => e.Code == "Forbidden"))
-                //{
-                //    return Forbid();
-                //}
 
                 return BadRequest(new { notifications });
             }

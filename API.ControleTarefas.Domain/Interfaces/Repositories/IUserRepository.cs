@@ -11,6 +11,6 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
     {
         Task AddAsync(UserEntity user);
         Task<UserEntity> GetByUserName(string userName);
-        Task<UserEntity> GetById(string id);
+        Task<UserEntity> GetById(Guid id);
     }
 }

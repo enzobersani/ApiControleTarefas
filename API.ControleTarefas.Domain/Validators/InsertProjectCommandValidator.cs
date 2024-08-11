@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Validators
 {
-    public class InsertProjectCommandValidator : AbstractValidator<UpsertProjectCommand>
+    public class InsertProjectCommandValidator : AbstractValidator<CreateProjectCommand>
     {
         public InsertProjectCommandValidator()
         {

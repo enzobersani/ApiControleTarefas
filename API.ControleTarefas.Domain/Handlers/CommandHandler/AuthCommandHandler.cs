@@ -4,7 +4,6 @@ using API.ControleTarefas.Domain.Interfaces.Repositories;
 using API.ControleTarefas.Domain.Interfaces.UnitOfWork;
 using API.ControleTarefas.Domain.Models.Response;
 using API.ControleTarefas.Domain.Notification;
-using BCrypt.Net;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

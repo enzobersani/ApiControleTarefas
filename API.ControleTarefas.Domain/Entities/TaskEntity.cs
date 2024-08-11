@@ -19,5 +19,20 @@ namespace API.ControleTarefas.Domain.Entities
 
             return tasks;
         }
+
+        public void Update(UpdateTaskCommand request)
+        {
+            if(!string.IsNullOrEmpty(request.Name))
+                Name = request.Name;
+
+            if(request.Description != null)
+                Description = request.Description;
+
+            if(request.ProjectId != null)
+                ProjectId = request.ProjectId;
+
+            if(request.CollaboratorId != null)
+                CollaboratorId = request.CollaboratorId;
+        }
     }
 }

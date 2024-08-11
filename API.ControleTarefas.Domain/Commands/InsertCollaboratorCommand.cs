@@ -12,6 +12,6 @@ namespace API.ControleTarefas.Domain.Commands
     public class InsertCollaboratorCommand : IRequest<BaseResponseModel>
     {
         public string Name { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

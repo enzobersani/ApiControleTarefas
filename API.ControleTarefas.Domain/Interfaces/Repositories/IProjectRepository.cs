@@ -11,8 +11,9 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
     public interface IProjectRepository
     {
         Task AddAsync(ProjectEntity project);
+        void Update(ProjectEntity project);
         Task<List<ProjectEntity>> GetByName(string name);
         Task<List<ProjectEntity>> GetAllProjects();
-        Task<ProjectEntity> GetById(string id);
+        Task<ProjectEntity> GetById(Guid id);
     }
 }

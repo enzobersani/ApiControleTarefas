@@ -1,7 +1,11 @@
 ﻿using API.ControleTarefas.Domain.Interfaces.Repositories;
 using API.ControleTarefas.Domain.Interfaces.UnitOfWork;
+using API.ControleTarefas.Domain.Models;
 using API.ControleTarefas.Domain.Notification;
+using API.ControleTarefas.Domain.Queries;
 using API.ControleTarefas.Infrastructure.Repositories;
+using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +23,7 @@ namespace API.ControleTarefas.Infrastructure.UnitOfWork
         private IProjectRepository _projectRepository;
         private ITaskRepository _taskRepository;
         private ICollaboratorRepository _collaboratorRepository;
+        private ITimeTrackerRepository _timeTrackerRepository;
         #endregion
 
         #region constructor
@@ -41,6 +46,9 @@ namespace API.ControleTarefas.Infrastructure.UnitOfWork
 
         public ICollaboratorRepository CollaboratorRepository
             => _collaboratorRepository ??= new CollaboratorRepository(_context, _notifications);
+
+        public ITimeTrackerRepository TimeTrackerRepository
+            => _timeTrackerRepository ??= new TimeTrackerRepository(_context, _notifications);
         #endregion
 
         #region methods

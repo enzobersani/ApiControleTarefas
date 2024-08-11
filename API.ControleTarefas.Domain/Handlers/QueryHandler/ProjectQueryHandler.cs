@@ -3,14 +3,8 @@ using API.ControleTarefas.Domain.Interfaces.UnitOfWork;
 using API.ControleTarefas.Domain.Models.Response;
 using API.ControleTarefas.Domain.Notification;
 using API.ControleTarefas.Domain.Queries;
-using Mapster;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Handlers.QueryHandler
 {

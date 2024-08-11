@@ -12,19 +12,28 @@ namespace API.ControleTarefas.Domain.Validators
     {
         public InsertTimeTrackersCommandValidator()
         {
-            RuleFor(task => task.StartDate)
+            RuleFor(x => x.StartDate)
                 .NotEmpty().WithMessage("A data de início é obrigatória.");
 
-            RuleFor(task => task.EndDate)
+            RuleFor(x => x.EndDate)
                 .NotEmpty().WithMessage("A data de término é obrigatória.")
-                .GreaterThanOrEqualTo(task => task.StartDate)
+                .GreaterThanOrEqualTo(x => x.StartDate)
                 .WithMessage("A data de término deve ser maior ou igual à data de início.");
 
-            RuleFor(task => task.TaskId)
+            RuleFor(x => x.TaskId)
                 .NotEmpty().WithMessage("O código da tarefa é obrigatório.");
 
-            RuleFor(task => task.CollaboratorId)
+            RuleFor(x => x.CollaboratorId)
                 .NotEmpty().WithMessage("O código do colaborador é obrigatório.");
+
+            RuleFor(x => x.TimeZoneId)
+                .NotEmpty().WithMessage("Time zone é obrigatório.")
+                .Must(ValidTimeZone).WithMessage("Time zone inválido.");
+        }
+
+        private bool ValidTimeZone(string timeZoneId)
+        {
+            return TimeZoneInfo.GetSystemTimeZones().Any(y => y.Id == timeZoneId);
         }
     }
 }
