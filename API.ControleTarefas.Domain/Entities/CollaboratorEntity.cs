@@ -7,7 +7,7 @@ namespace API.ControleTarefas.Domain.Entities
     public class CollaboratorEntity : BaseEntity
     {
         public string Name { get; private set; }
-        public string UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         public static CollaboratorEntity New(InsertCollaboratorCommand request)
         {

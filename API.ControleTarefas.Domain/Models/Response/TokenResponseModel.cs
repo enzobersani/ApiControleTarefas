@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Models.Response
 {
-    public class RegisterUserResponseModel
+    public class TokenResponseModel
     {
-        public DateTime Date { get; set; }
+        public string Token { get; set; }
     }
 }

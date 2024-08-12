@@ -2,6 +2,7 @@
 using API.ControleTarefas.Domain.Commands;
 using API.ControleTarefas.Domain.Models.Response;
 using API.ControleTarefas.Domain.Notification;
+using API.ControleTarefas.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,42 @@ namespace API.ControleTarefas.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Inclusão de TimeTrackers
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponseModel), 201)]
         [ProducesResponseType(typeof(Notification), 400)]
         [Produces("application/json")]
         public async Task<IActionResult> Create([FromBody] InsertTimeTrackersCommand request)
             => Response(await _mediator.Send(request), 201);
+
+        /// <summary>
+        /// Consulta de TimeTrackers
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("task")]
+        [ProducesResponseType(typeof(SearchTimeTrackerResponseModel), 200)]
+        [ProducesResponseType(typeof(Notification), 400)]
+        [Produces("application/json")]
+        public async Task<IActionResult> Search([FromQuery] SearchTimeTrackerQuery request)
+            => Response(await _mediator.Send(request), 200);
+
+        /// <summary>
+        /// Consulta de horas gastadas
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("hours")]
+        [ProducesResponseType(typeof(SearchHoursResponseModel), 200)]
+        [ProducesResponseType(typeof(Notification), 400)]
+        [Produces("application/json")]
+        public async Task<IActionResult> SearchHours([FromQuery] SearchHoursQuery request)
+            => Response(await _mediator.Send(request), 200);
     }
 }

@@ -40,6 +40,8 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
             if (await _unitOfWork.CollaboratorRepository.GetById(request.CollaboratorId) is null)
                 _notifications.AddNotification("Handle", "Colaborador informado não cadastrado.");
 
+            await ValidTime(request);
+
             if (_notifications.HasNotifications())
                 return new BaseResponseModel();
 
@@ -53,6 +55,18 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
             {
                 Id = timeTracker.Id
             };
+        }
+
+        public async Task ValidTime(InsertTimeTrackersCommand request)
+        {
+            var startOfDay = request.StartDate.Date;
+            var endOfDay = request.StartDate.AddDays(1).AddTicks(-1);
+
+            var totalHoursInDay = await _unitOfWork.TimeTrackerRepository.GetTotalHoursInDayAsync(startOfDay, endOfDay, request.CollaboratorId);
+            var requestedHours = (request.EndDate - request.StartDate).TotalHours;
+
+            if (totalHoursInDay + requestedHours > 24)
+                _notifications.AddNotification("Handle", "O total de horas para este colaborador excede 24 horas em um único dia.");
         }
     }
 }

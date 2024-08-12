@@ -4,6 +4,7 @@ using API.ControleTarefas.Domain.Notification;
 using API.ControleTarefas.Domain.Queries;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
+using System.Xml.Linq;
 
 namespace API.ControleTarefas.Infrastructure.Repositories
 {
@@ -62,6 +63,19 @@ namespace API.ControleTarefas.Infrastructure.Repositories
         public IQueryable<CollaboratorEntity> Query()
         {
             return _context.Collaborators.AsQueryable();
+        }
+
+        public async Task<CollaboratorEntity> GetByUserId(Guid userId)
+        {
+            try
+            {
+                return await _context.Collaborators.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
+            }
+            catch (Exception ex)
+            {
+                _notifications.AddNotification("GetByUserId", $"Ocorreu um erro: {ex.Message}");
+                return null;
+            }
         }
     }
 }

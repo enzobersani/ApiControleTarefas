@@ -28,12 +28,7 @@ namespace API.ControleTarefas.Domain.Validators
 
             RuleFor(x => x.TimeZoneId)
                 .NotEmpty().WithMessage("Time zone é obrigatório.")
-                .Must(ValidTimeZone).WithMessage("Time zone inválido.");
-        }
-
-        private bool ValidTimeZone(string timeZoneId)
-        {
-            return TimeZoneInfo.GetSystemTimeZones().Any(y => y.Id == timeZoneId);
+                .MaximumLength(250).WithMessage("O Time zone deve ter no máximo 250 caracteres");
         }
     }
 }

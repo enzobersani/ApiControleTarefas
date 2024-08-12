@@ -14,5 +14,6 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
         Task<List<CollaboratorEntity>> GetByName(string name);
         Task<List<CollaboratorEntity>> GetAllCollaborators();
         IQueryable<CollaboratorEntity> Query();
+        Task<CollaboratorEntity> GetByUserId(Guid userId);
     }
 }

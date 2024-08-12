@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace API.ControleTarefas.Domain.Models.Response
 {
-    public class RegisterUserResponseModel
+    public class SearchHoursResponseModel
     {
-        public DateTime Date { get; set; }
+        public string HoursToday { get; set; }
+        public string HoursMonth { get; set; }
     }
 }

@@ -18,6 +18,11 @@ namespace API.ControleTarefas.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Inclusão de um novo colaborador vinculado com um usuário.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponseModel), 201)]
         [ProducesResponseType(typeof(Notification), 400)]
@@ -25,6 +30,11 @@ namespace API.ControleTarefas.Controllers
         public async Task<IActionResult> Create([FromBody] InsertCollaboratorCommand request)
             => Response(await _mediator.Send(request), 201);
 
+        /// <summary>
+        /// Consuta de colaboradores.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(CollaboratorKeyResultModel), 200)]
         [ProducesResponseType(typeof(Notification), 400)]

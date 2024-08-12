@@ -12,5 +12,8 @@ namespace API.ControleTarefas.Domain.Interfaces.Repositories
     {
         Task AddAsync(TimeTrackerEntity timeTracker);
         Task<bool> HasConflictingTimeAsync(DateTime startDate, DateTime endDate, Guid collaboratorId);
+        Task<double> GetTotalHoursInDayAsync(DateTime startOfDay, DateTime endOfDay, Guid collaboratorId);
+        Task<List<TimeTrackerEntity>> getByTaskId(Guid taskId);
+        Task<double> GetHoursAsync(Guid collaboratorId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
     }
 }

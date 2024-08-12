@@ -31,8 +31,7 @@ namespace API.ControleTarefas.Domain.Entities
             if(request.ProjectId != null)
                 ProjectId = request.ProjectId;
 
-            if(request.CollaboratorId != null)
-                CollaboratorId = request.CollaboratorId;
+            CollaboratorId = request.CollaboratorId;
         }
     }
 }

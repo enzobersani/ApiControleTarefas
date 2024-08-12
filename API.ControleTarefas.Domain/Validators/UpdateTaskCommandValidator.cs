@@ -15,6 +15,9 @@ namespace API.ControleTarefas.Domain.Validators
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id da tarefa é obrigatório.");
 
+            RuleFor(x => x.Name)
+                .MaximumLength(250).WithMessage("Nome da tarefa deve ter no máximo 250 caracteres");
+
             RuleFor(x => x.ProjectId)
                  .NotEqual(Guid.Empty).When(x => x.ProjectId.HasValue).WithMessage("Id do projeto não pode ser passado como vazio.");
         }

@@ -14,7 +14,7 @@ using System.Text;
 namespace API.ControleTarefas.Domain.Handlers.CommandHandler
 {
     public class AuthCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserResponseModel>,
-                                      IRequestHandler<LoginCommand, RegisterUserResponseModel>
+                                      IRequestHandler<LoginCommand, TokenResponseModel>
     {
         private readonly INotificationService _notifications;
         private readonly IConfiguration _configuration;
@@ -46,25 +46,39 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
 
             await _unitOfWork.CommitAsync();
 
-            var token = GenerateToken(user.Id, request.UserName);
-
             return new RegisterUserResponseModel
             {
-                Token = token
+                Date = new DateTime()
             };
         }
 
-        public async Task<RegisterUserResponseModel> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<TokenResponseModel> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.UserRepository.GetByUserName(request.UserName);
+            if(user is null)
+            {
+                _notifications.AddNotification("Handle", "Nome de usuário ou senha inválidos!");
+                return new TokenResponseModel();
+            }
+
+            var collaborator = await _unitOfWork.CollaboratorRepository.GetByUserId(user.Id);
+            if(collaborator is null)
+            {
+                _notifications.AddNotification("Handle", "Usuário não possui vinculo com um colaborador!");
+                return new TokenResponseModel();
+            }
+
             if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
                 _notifications.AddNotification("Unauthorized", "Nome de usuário ou senha inválidos!");
-                return new RegisterUserResponseModel();
+                return new TokenResponseModel();
             }
 
-            var token = GenerateToken(user.Id, request.UserName);
-            return new RegisterUserResponseModel
+            if(_notifications.HasNotifications())
+                return new TokenResponseModel();
+
+            var token = GenerateToken(user.Id, collaborator.Id);
+            return new TokenResponseModel
             {
                 Token = token
             };
@@ -78,18 +92,18 @@ namespace API.ControleTarefas.Domain.Handlers.CommandHandler
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        private string GenerateToken(Guid id, string userName)
+        private string GenerateToken(Guid id, Guid collaboratorId)
         {
             var claims = new[]
             {
                 new Claim("id", id.ToString()),
-                new Claim("userName", userName),
+                new Claim("collaboratorId", collaboratorId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretKey"]));
             var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddMinutes(60);
+            var expiration = DateTime.UtcNow.AddMinutes(120);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["jwt:issuer"],

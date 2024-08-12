@@ -17,6 +17,11 @@ namespace API.ControleTarefas.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Inclusão de tarefas.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponseModel), 201)]
         [ProducesResponseType(typeof(Notification), 400)]
@@ -24,13 +29,23 @@ namespace API.ControleTarefas.Controllers
         public async Task<IActionResult> Create([FromBody] InsertTaskCommand request)
             => Response(await _mediator.Send(request), 201);
 
+        /// <summary>
+        /// Atualização de tarefas
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(UpdateTaskResponseModel), 200)]
         [ProducesResponseType(typeof(Notification), 400)]
         [Produces("application/json")]
         public async Task<IActionResult> Update([FromBody] UpdateTaskCommand request)
             => Response(await _mediator.Send(request), 200);
-
+        
+        /// <summary>
+        /// Exclusão de tarefas
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(DeleteTaskResponseModel), 200)]
         [ProducesResponseType(typeof(Notification), 400)]
@@ -38,6 +53,11 @@ namespace API.ControleTarefas.Controllers
         public async Task<IActionResult> Delete(Guid id)
             => Response(await _mediator.Send(new DeleteTaskCommand(id)));
 
+        /// <summary>
+        /// Consulta de tarefas
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(SearchTaskResponseModel), 200)]
         [ProducesResponseType(typeof(Notification), 400)]

@@ -17,6 +17,11 @@ namespace API.ControleTarefas.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Registro de novo usuário.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register")]
         [ProducesResponseType(typeof(RegisterUserResponseModel), 201)]
@@ -25,6 +30,11 @@ namespace API.ControleTarefas.Controllers
         public async Task<IActionResult> Auth([FromBody] RegisterUserCommand request)
             => Response(await _mediator.Send(request), 201);
 
+        /// <summary>
+        /// Login para usuários cadastrados.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("login")]
         [ProducesResponseType(typeof(RegisterUserResponseModel), 200)]
